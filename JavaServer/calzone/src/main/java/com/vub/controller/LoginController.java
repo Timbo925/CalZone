@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+
+import com.vub.db.DbTranslate;
 //import com.vub.model.Credentials;
 import com.vub.model.User;
 
@@ -14,6 +16,8 @@ import com.vub.model.User;
 //@RequestMapping("/login")
 @Controller
 public class LoginController {
+	
+	DbTranslate db = new DbTranslate();
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String showLogin(@ModelAttribute("user") User user) {
@@ -23,6 +27,10 @@ public class LoginController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String processLogin(@ModelAttribute("user") User user) {
 		System.out.println("/login POST");
+		
+		db.openConnection();
+		db.showPersons();
+		
 		if (user.getUserName() != "" && user.getPassword() != "") {
 			System.out.println(user.getUserName());
 			System.out.println(user.getPassword());
