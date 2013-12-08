@@ -7,17 +7,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
-// Notice, do not import com.mysql.jdbc.*
-// or you will have problems!
-
 public class DbLink {
 	
-	private static DbConfigFile dbconfig = new DbConfigFile("Wilmadbconfig.txt");
+	private static DbConfigFile dbconfig = new DbConfigFile("/Testdbconfig.txt");
 	
-	private static String db_user = "se2_1314";//dbconfig.getUser();
-	private static String db_password = "Bean59Cabal";//dbconfig.getPassword();
-	private static String db_name = "se2_1314";//dbconfig.getName();
-	private static String url = "jdbc:mysql://wilma.vub.ac.be";//dbconfig.getUrl();
+	private static String db_user = dbconfig.getUser();
+	private static String db_password = dbconfig.getPassword();
+	private static String url = dbconfig.getUrl();
 	
 	private static Connection db_connection;
 	
@@ -27,11 +23,6 @@ public class DbLink {
 	
 	public static ResultSet executeSqlQuery(String sql) {
 		try {
-			//System.out.println("JAAAAAAAAAA 1");
-			//db_connection = DriverManager.getConnection(url,db_user,db_password);
-        	//db_connection.setCatalog(db_name);
-			//stmt = db_connection.createStatement();
-			System.out.println("JAAAAAAAAAA 2");
 			return stmt.executeQuery(sql);
 		} catch (SQLException ex) {
 			// TODO Auto-generated catch block
@@ -42,15 +33,14 @@ public class DbLink {
 		}
 	}
 	
-	public static boolean executeSql(String sql) {
+	public static void executeSql(String sql) {
 		try {
-			return stmt.execute(sql);
+			stmt.execute(sql);
 		} catch (SQLException ex) {
 			// TODO Auto-generated catch block
 			System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ((SQLException) ex).getSQLState());
             System.out.println("VendorError: " + ((SQLException) ex).getErrorCode());
-            return false;
 		}
 	}
 	
@@ -59,7 +49,6 @@ public class DbLink {
 			//rs.close();
 			//stmt.close();
 			db_connection.close();
-			System.out.println("\n!- Connection closed. -!");
 		} catch (SQLException ex) {
 			// handle the error
         	System.out.println("SQLException: " + ex.getMessage());
@@ -71,13 +60,8 @@ public class DbLink {
 	public static void openConnection() {
         try {
         	
-        	System.out.println("++++ OPENING CONNECTION ++++");
-        	
         	db_connection = DriverManager.getConnection(url,db_user,db_password);
-        	db_connection.setCatalog(db_name);
         	stmt = db_connection.createStatement();
-        	
-        	System.out.println("++++ CONNECTION OPENED ++++");	
         	
         	// rs = executeSqlQuery("SELECT * FROM Persons;");
         	// test ( bij elk nieuw gebruik van stmt wordt rs geclosed !! )

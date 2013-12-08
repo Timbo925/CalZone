@@ -4,37 +4,53 @@ import java.io.*;
 
 import javax.servlet.ServletContext;
 
+/* The .txt file has to be in this format:
+ * 
+ * ---------------------------------------
+ * db-user \n
+ * db-password \n
+ * db-url eof
+ * ---------------------------------------
+ * 
+ * note: after the db-url nothing may be added ( no newline ! )
+ * 
+ */
+
 public class DbConfigFile {
 
-	private static String user = null;
-	private static String password = null;
-	private static String name = null;
-	private static String url = null;
+	private static String user = "";
+	private static String password = "";
+	private static String url = "";
 	
 	public DbConfigFile(String fileName) {
 		
-		//ServletContext context;
-		File file = new File(fileName);//context.getRealPath(fileName);
-		BufferedReader reader = null;
+		InputStream in = getClass().getResourceAsStream(fileName);
+		int Byte;       // Byte because byte is keyword!
 		
 		try {
-			reader = new BufferedReader(new FileReader(file));
-			user = reader.readLine();
-			password = reader.readLine();
-			name = reader.readLine();
-			url = reader.readLine();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			
+			// Byte = 10 = NEWLINE
+			
+			// Getting user
+			
+			while ((Byte = in.read()) != 10 ) {
+				user = user+(char) Byte;
+			}
+			
+			// Getting password
+			
+			while ((Byte = in.read()) != 10 ) {
+				password = password+(char) Byte;
+			}
+			
+			// Geting url
+			
+			while ((Byte = in.read()) != -1 ) {
+				url = url+(char) Byte;
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 	}
 
@@ -46,11 +62,6 @@ public class DbConfigFile {
 
 	public static String getPassword() {
 		return password;
-	}
-
-
-	public static String getName() {
-		return name;
 	}
 
 
