@@ -26,10 +26,13 @@ public class LoginController {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String processLogin(@ModelAttribute("user") User user) {
-		System.out.println("/login POST");
+		System.out.println("POST request /login ");
 		
-		db.openConnection();
-		db.showPersons();
+		//db.openConnection();
+		//db.showPersons();
+		String userName = user.getUserName();
+		String password = user.getPassword();
+		
 		
 		if (user.getUserName() != "" && user.getPassword() != "") {
 			System.out.println(user.getUserName());
